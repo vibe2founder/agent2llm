@@ -2,6 +2,7 @@
   "name": "agent2llm",
   "version": "0.1.0",
   "description": "Agente de programação em CLI com TUI usando llm2router",
+  "description": "Agente de programa\u00e7\u00e3o em CLI com TUI usando llm2router",
   "type": "module",
   "bin": {
     "agent2llm": "src/cli.js"
@@ -14,6 +15,8 @@
     "test": "npm run test:tdd && npm run test:bdd && npm run test:security",
     "postinstall": "npm --prefix node_modules/@purecore/one-llm-4-all install && npm --prefix node_modules/@purecore/one-llm-4-all run build",
     "test:security": "npm audit --audit-level=high"
+    "lint": "node --check src/cli.js",
+    "postinstall": "npm --prefix node_modules/@purecore/one-llm-4-all install && npm --prefix node_modules/@purecore/one-llm-4-all run build"
   },
   "dependencies": {
     "@purecore/one-llm-4-all": "github:vibe2founder/llm2router",

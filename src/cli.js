@@ -1,6 +1,12 @@
 #!/usr/bin/env node
 import blessed from 'blessed';
 import { sendPrompt } from '../node_modules/@purecore/one-llm-4-all/dist/src/index.js';
+import { SYSTEM_PROMPT, createInitialState } from './config.js';
+import { askLLM } from './chat.js';
+import { handleCommand, showHelpText } from './commands.js';
+import { sanitizeTerminalText } from './security.js';
+
+const state = createInitialState();
 
 const SYSTEM_PROMPT = `Você é um agente de programação para terminal.
 Regras:
@@ -49,6 +55,7 @@ const chatBox = blessed.log({
   keys: true,
   mouse: true,
   scrollback: 1000,
+  scrollbar: { ch: ' ', inverse: true }
   scrollbar: {
     ch: ' ',
     inverse: true
@@ -84,6 +91,14 @@ const updateHeader = () => {
 
 const logLine = (who, text) => {
   const color = who === 'Você' ? 'green' : who === 'Sistema' ? 'yellow' : 'cyan';
+  chatBox.add(`{bold}{${color}-fg}${who}:{/${color}-fg}{/bold} ${sanitizeTerminalText(text)}`);
+  screen.render();
+};
+
+const showHelp = () => logLine('Sistema', showHelpText);
+
+input.on('submit', async (value) => {
+  const prompt = sanitizeTerminalText(value).trim();
   chatBox.add(`{bold}{${color}-fg}${who}:{/${color}-fg}{/bold} ${text}`);
   screen.render();
 };
@@ -190,17 +205,34 @@ input.on('submit', async (value) => {
   if (!prompt) return;
 
   if (prompt.startsWith('/')) {
+    handleCommand(prompt, state, {
+      logLine,
+      updateHeader,
+      clearChat: () => chatBox.setContent(''),
+      exit: process.exit
+    });
     handleCommand(prompt);
     input.focus();
     return;
   }
 
   logLine('Você', prompt);
+  await askLLM({
+    content: prompt,
+    state,
+    sendPrompt,
+    chatBox,
+    render: () => screen.render(),
+    logLine,
+    systemPrompt: SYSTEM_PROMPT
+  });
   await askLLM(prompt);
   input.focus();
 });
 
 screen.key(['q', 'C-c'], () => process.exit(0));
+updateHeader();
+showHelp();
 chatBox.key(['up', 'down', 'pageup', 'pagedown'], () => {});
 
 updateHeader();

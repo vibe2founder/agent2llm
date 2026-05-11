@@ -1,6 +1,6 @@
 # agent2llm
 
-Agente de programação em **CLI com TUI** usando a biblioteca [`llm2router` / `@purecore/one-llm-4-all`](https://github.com/vibe2founder/llm2router).
+Agente de programação em **CLI com TUI em TypeScript** usando a biblioteca [`llm2router` / `@purecore/one-llm-4-all`](https://github.com/vibe2founder/llm2router).
 
 ## Requisitos
 
@@ -21,7 +21,7 @@ npm start
 Ou direto pelo binário local:
 
 ```bash
-npx agent2llm
+npm run build && npx agent2llm
 ```
 
 ## Configuração

@@ -1,0 +1,32 @@
+{
+  "name": "agent2llm",
+  "version": "0.1.0",
+  "description": "Agente de programação em CLI com TUI usando llm2router",
+  "type": "module",
+  "bin": {
+    "agent2llm": "dist/cli.js"
+  },
+  "scripts": {
+    "start": "tsx src/cli.ts",
+    "lint": "tsc --noEmit",
+    "test:tdd": "vitest run",
+    "test:bdd": "node --import tsx ./node_modules/@cucumber/cucumber/bin/cucumber.js --import steps/**/*.ts features/**/*.feature",
+    "test": "npm run lint && npm run test:tdd && npm run test:bdd && npm run test:security",
+    "postinstall": "npm --prefix node_modules/@purecore/one-llm-4-all install && npm --prefix node_modules/@purecore/one-llm-4-all run build",
+    "test:security": "npm audit --audit-level=high",
+    "build": "tsc -p tsconfig.json",
+    "prestart": "npm run build"
+  },
+  "dependencies": {
+    "@purecore/one-llm-4-all": "github:vibe2founder/llm2router",
+    "blessed": "^0.1.81"
+  },
+  "devDependencies": {
+    "@cucumber/cucumber": "^11.0.1",
+    "vitest": "^2.1.8",
+    "typescript": "^5.6.3",
+    "tsx": "^4.19.2",
+    "@types/node": "^22.10.2",
+    "@types/blessed": "^0.1.25"
+  }
+}

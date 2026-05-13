@@ -22,7 +22,7 @@
     "blessed": "^0.1.81"
   },
   "devDependencies": {
-    "@cucumber/cucumber": "^11.0.1",
+    "@cucumber/cucumber": "^12.8.3",
     "vitest": "^2.1.8",
     "typescript": "^5.6.3",
     "tsx": "^4.19.2",
